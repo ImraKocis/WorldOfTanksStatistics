@@ -10,6 +10,7 @@ import React from "react";
   }
   const styles = StyleSheet.create({
     loading: {
+      flex: 1,
       backgroundColor: "#fff",
       alignItems: "center",
       justifyContent: "center",
@@ -37,6 +38,7 @@ const LoginView = () =>  {
         }
       )
     }, []);
+    
       
       
       handleWebViewNavigationStateChange = (newNavState) => {
@@ -50,12 +52,14 @@ const LoginView = () =>  {
         }
       }
       return(
-        <SafeAreaView style = {{flex:1}}>
+        <SafeAreaView style={{flex:1}}>
           {isLoaded ? 
           <WebView
             source = {{uri: loginFormUrl.data.location}}
             onNavigationStateChange = {handleWebViewNavigationStateChange}
-          /> : <Text style={styles.loading}>Loading...</Text>}
+          /> :<View style={styles.loading}>
+                <Text>Loading...</Text>
+              </View>}
         </SafeAreaView>
       )
     }

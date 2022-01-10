@@ -2,6 +2,7 @@ import React,{useEffect, useState, Component} from 'react';
 import { NativeBaseProvider, Box, Text, Center,Linking, Modal, View } from 'native-base';
 import { WebView } from 'react-native-webview';
 import LoginView from "./login/login";
+import MainScreen from './main_screen/main_screen';
 
 
 
@@ -35,8 +36,8 @@ export default function App() {
   return (
     //ovo sve u modal => https://stackoverflow.com/questions/46172901/how-to-close-a-react-native-webview
     
-    
-       <LoginView></LoginView>
+    <MainScreen></MainScreen>
+       //<LoginView></LoginView>
 
   );
   /* handleWebViewNavigationStateChange = (newNavState) => {
