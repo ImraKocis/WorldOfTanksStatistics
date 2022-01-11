@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { StyleSheet, View, ImageBackground, Text,Image, Button } from 'react-native'
 
 const image_uri={uri: "https://i.pinimg.com/originals/e3/1e/73/e31e73ea76d155f29e6686335370723c.jpg"}
@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
 
     }
 })
-const MainScreen = () => {
+const MainScreen = ({handleLoginButton}) => {
+    
     return (
         <View style={styles.image_container}>
             <View style={styles.image_view}>
@@ -55,7 +56,11 @@ const MainScreen = () => {
                 <Text style={styles.text}>Statistics</Text>
             </View>
             <View style={styles.button_view}>
-                <Button></Button>
+                <Button
+                    onPress={handleLoginButton}
+                    title='LOGIN'
+                    color="#f95813"
+                />
             </View>
         </View>
     )
