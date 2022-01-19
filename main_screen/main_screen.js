@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     opacity: 0.7,
     marginTop: 10,
+    marginBottom: 10,
   },
   button_text: {
     color: 'white',

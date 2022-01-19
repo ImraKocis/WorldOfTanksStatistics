@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
 });
 const WithoutLoginView = () => {
-  return <Text style={styles.text}>Jos malo pa sad će</Text>;
+  return <Text style={styles.text}>Test</Text>;
 };
 
 export default WithoutLoginView;
