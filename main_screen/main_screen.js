@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   overlay: {
     opacity: 1,
   },
-  login_button: { margin: 10 },
+  login_button: { margin: 30 },
   without_login_button: {
     elevation: 3,
     backgroundColor: 'black',
@@ -60,9 +60,11 @@ const styles = StyleSheet.create({
   button_view: {
     justifyContent: 'flex-end',
     flex: 1,
+    marginBottom: 20,
+    width: 150,
   },
 });
-const MainScreen = ({ handleLoginButton, handleWithOutLoginButton }) => {
+const MainScreen = ({ navigation }) => {
   return (
     <View style={styles.image_container}>
       <View style={styles.image_view}>
@@ -79,15 +81,10 @@ const MainScreen = ({ handleLoginButton, handleWithOutLoginButton }) => {
       <View style={styles.button_view}>
         <Button
           style={styles.login_button}
-          onPress={handleLoginButton}
+          onPress={() => navigation.navigate('Login')}
           title='LOGIN'
           color='#f95813'
         />
-        <Pressable
-          style={styles.without_login_button}
-          onPress={handleWithOutLoginButton}>
-          <Text style={styles.button_text}>Nastavi bez prijave</Text>
-        </Pressable>
       </View>
     </View>
   );

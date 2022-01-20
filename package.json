@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.0.9",
     "@react-navigation/drawer": "^6.1.8",
+    "@react-navigation/material-top-tabs": "^6.0.6",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
     "expo": "~44.0.0",
@@ -25,8 +26,10 @@
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
     "react-native-svg": "12.1.1",
+    "react-native-tab-view": "^3.1.1",
     "react-native-web": "0.17.1",
-    "react-native-webview": "^11.15.0"
+    "react-native-webview": "^11.15.0",
+    "react-native-pager-view": "5.4.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
