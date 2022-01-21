@@ -12,6 +12,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import SignOutNvigator from './navigator/SignOutNvigator';
+import LogedInNavigator from './navigator/LogedInNavigator';
 const styles = StyleSheet.create({
   appView: {
     flex: 1,
@@ -26,61 +27,44 @@ export default function App() {
   handleWebViewNavigationStateChange = (newNavState) => {
     const { url } = newNavState;
     if (!url) return;
-
+    var status, access_token, nickname, account_id, expires_at;
     if (url.includes('status=ok')) {
       setEndLoginResponseOnlyUrl(url);
-      const arrLogin = loginEndResponseOnlyUrl.split('&');
+      const arrLogin = url.split('&');
+
+      status = arrLogin[1].split('=');
+      access_token = arrLogin[2].split('=');
+      nickname = arrLogin[3].split('=');
+      account_id = arrLogin[4].split('=');
+      expires_at = arrLogin[5].split('=');
+
       setLoginDataObject({
-        status: arrLogin[1],
-        access_token: arrLogin[2],
-        nickname: arrLogin[3],
-        account_id: arrLogin[4],
-        expires_at: arrLogin[5],
+        status: status[1],
+        access_token: access_token[1],
+        nickname: nickname[1],
+        account_id: account_id[1],
+        expires_at: expires_at[1],
       });
-      console.log(loginDataObject);
-      //loginDataObject && navigation.navigate('Players');
+      //console.log(loginDataObject);
+      loginDataObject && setIsLogedIn(true);
     }
   };
 
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
-  function HomeTabs() {
-    return (
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          headerShown: false,
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
 
-            if (route.name === 'Home') {
-              iconName = focused ? 'ios-home' : 'ios-home-outline';
-            } else if (route.name === 'Players') {
-              iconName = focused ? 'ios-people' : 'ios-people-outline';
-            }
-
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: 'tomato',
-          tabBarInactiveTintColor: 'gray',
-        })}>
-        <Tab.Screen
-          name='Home'
-          component={MainScreen}
-          handleLoginButton={handleLoginButton}></Tab.Screen>
-
-        <Tab.Screen name='Players' component={PersonalDataScreen}></Tab.Screen>
-
-        {/* <Drawer.Screen name='Tenkopedia'></Drawer.Screen> */}
-        {/* <Drawer.Screen name='Clans'></Drawer.Screen> */}
-      </Tab.Navigator>
-    );
-  }
   return (
     <SafeAreaProvider>
-      <SignOutNvigator
-        handleWebViewNavigationStateChange={handleWebViewNavigationStateChange}
-      />
+      {!isLogedIn ? (
+        <SignOutNvigator
+          handleWebViewNavigationStateChange={
+            handleWebViewNavigationStateChange
+          }
+        />
+      ) : (
+        <LogedInNavigator loginDataObject={loginDataObject} />
+      )}
+
       {/* <StatusBar hidden></StatusBar> */}
       {/* <NavigationContainer>
         <Stack.Navigator initialRouteName='Home'>
