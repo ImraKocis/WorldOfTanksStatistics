@@ -1,5 +1,11 @@
 import react, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  ActivityIndicator,
+} from 'react-native';
 import { WebView } from 'react-native-webview';
 import { render } from 'react-dom';
 import LoadingService from './services/loadingService';
@@ -17,6 +23,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+function LoadingIndicatorView() {
+  return <ActivityIndicator color='#009b88' size='large' />;
+}
 const LoginView = ({ handleWebViewNavigationStateChange }) => {
   const [loginFormUrl, setLoginFormUrl] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -47,10 +56,12 @@ const LoginView = ({ handleWebViewNavigationStateChange }) => {
         <WebView
           source={{ uri: loginFormUrl.data.location }}
           onNavigationStateChange={handleWebViewNavigationStateChange}
+          //renderLoading={LoadingIndicatorView}
+          //startInLoadingState={true}
         />
       ) : (
         <View style={styles.loading}>
-          <Text>Loading...</Text>
+          <LoadingIndicatorView></LoadingIndicatorView>
         </View>
       )}
     </SafeAreaView>

@@ -8,189 +8,22 @@ import {
   Button,
   ScrollView,
   SafeAreaView,
+  Settings,
 } from 'react-native';
+import { personalDataStyle } from './personalDataStyle';
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useForceUpdate from '../komponente/forceUpdate';
-const styles = StyleSheet.create({
-  sammaryView: { backgroundColor: '#2d322d', flex: 1 },
-  topTextView: { flex: 1, flexDirection: 'row' },
-  bottomTextView: { flex: 1, flexDirection: 'row' },
-  topLeftTextView: {
-    marginTop: 50,
-    margin: 10,
-    flex: 1,
-    marginLeft: 10,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-  },
-  topRightTextView: {
-    margin: 10,
-    marginTop: 50,
-    flex: 1,
-    marginLeft: 10,
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-start',
-  },
-  bottomLeftTextView: {
-    margin: 10,
-    marginTop: 30,
-    flex: 1,
-    marginLeft: 10,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-  },
-  bottomCenterTextView: {
-    margin: 10,
-    marginTop: 30,
-    flex: 1.1,
-    marginLeft: 10,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  bottomRightTextView: {
-    margin: 10,
-    marginTop: 30,
-    flex: 1,
-    marginLeft: 10,
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-start',
-  },
-  textView: {
-    margin: 10,
-    flex: 1,
-    justifyContent: 'center',
-  },
-  statsText: { color: 'white', fontSize: 20, marginTop: 2 },
-  headerText: {
-    color: '#5c5c5c',
-    fontSize: 15,
-    textAlign: 'center',
-  },
-  clanView: {
-    flex: 0.3,
-    flexDirection: 'row',
-  },
-  clanPaper: {
-    marginTop: 10,
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 10,
-    flex: 0.3,
-    elevation: 5,
-    shadowRadius: 5,
-    backgroundColor: '#3b3b3b',
-    borderRadius: 10,
-  },
-  clanEmblemView: {
-    flex: 0.5,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    marginLeft: 5,
-  },
-  clanTagNameView: {
-    flex: 0.8,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  clanCreatedAtView: {
-    flex: 0.5,
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    marginRight: 10,
-  },
-  clanContainer: { flex: 1, flexDirection: 'row' },
-  clanNameText: { color: 'white' },
-  clanMembersCountText: { color: '#5c5c5c', fontSize: 12 },
-  privateDataPaper: {
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 10,
-    flex: 0.3,
-    elevation: 5,
-    shadowRadius: 5,
-    backgroundColor: '#3b3b3b',
-    borderRadius: 10,
-  },
-  privateDataView: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  privateDataText: { color: 'white', fontSize: 18 },
-  privateDataGoldText: { color: '#ffd700', fontSize: 18 },
-  emblemView: {
-    flex: 1,
-    marginTop: 20,
-    marginLeft: 10,
-    marginRight: 10,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  achievView: { flex: 1, flexDirection: 'row', width: '100%', margin: 20 },
-  statsView: {
-    marginTop: 50,
-    marginLeft: 20,
-    marginRight: 20,
-    flex: 1,
-    elevation: 5,
-    shadowRadius: 5,
-    backgroundColor: '#3b3b3b',
-    borderRadius: 10,
-  },
-  nicknameText: { fontSize: 22, color: 'white' },
-  nicknameView: {
-    flex: 1,
-    marginLeft: 50,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  bottomBottomTextView: {
-    flex: 0.2,
-    marginBottom: 10,
-    flexDirection: 'row',
-  },
-  lastBattleTextView: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-end',
-    marginLeft: 10,
-  },
-  createdAt: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    marginRight: 10,
-  },
-  headerView: { flex: 0.2, flexDirection: 'row', backgroundColor: '#3b3b3b' },
-  signOutView: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    marginRight: 20,
-  },
-});
+import PersonalDataTopTabNavigator from '../navigator/PersonalDataTopTabNavigator';
+import numbro from 'numbro';
+const styles = personalDataStyle;
 const requestOptions = {
   method: 'GET',
 };
 const PersonalDataScreen = ({ loginDataObject }) => {
   const [personalDataObject, setPersonalDataObject] = useState(null);
   const [personalClanDataObject, setPersonalClanDataObject] = useState(null);
-  const [wins, setWins] = useState(null);
+  const [aditionalData, setAditionalData] = useState(null);
   const [createdAtObject, setCreatedAtObject] = useState(null);
   const [personalDataIds, setPersonaldataIds] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -218,6 +51,13 @@ const PersonalDataScreen = ({ loginDataObject }) => {
     }
     return o;
   };
+  function secondsToHours(s) {
+    s = Number(s);
+    var h = Math.floor(s / 3600);
+
+    var hDisplay = h > 0 ? h + (h == 1 ? ' hour ' : ' hours ') : '';
+    return hDisplay.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  }
   const getPersonalData = async () => {
     const response = await fetch(personalDataUrl, requestOptions);
     return await response.json();
@@ -251,6 +91,23 @@ const PersonalDataScreen = ({ loginDataObject }) => {
       'data.' + acc_id_str + '.statistics.all.wins'
     );
     var wins_in_percent = (wins / battles) * 100;
+    var damage_dealt = Object.byString(
+      response,
+      'data.' + acc_id_str + '.statistics.all.damage_dealt'
+    );
+    var avg_damage_dealt = damage_dealt / battles;
+    var acc_created_timestamp = Object.byString(
+      response,
+      'data.' + acc_id_str + '.created_at'
+    );
+    var acc_last_battle_timestpam = Object.byString(
+      response,
+      'data.' + acc_id_str + '.last_battle_time'
+    );
+    var timeInBattleInSec = Object.byString(
+      response,
+      'data.' + acc_id_str + '.private.battle_life_time'
+    );
     const clanResponse = await getPersonalClanData(clan_id_str);
     var clan_created_at_timestamp = Object.byString(
       clanResponse,
@@ -258,50 +115,45 @@ const PersonalDataScreen = ({ loginDataObject }) => {
     );
 
     var clan_date = new Date(clan_created_at_timestamp * 1000);
+    var acc_created_at = new Date(acc_created_timestamp * 1000);
+    var acc_time_in_battle = secondsToHours(timeInBattleInSec);
+    var acc_last_battle_time = new Date(acc_last_battle_timestpam * 1000);
 
     setPersonalClanDataObject(clanResponse);
     setPersonaldataIds({ acc_id_str: acc_id_str, clan_id_str: clan_id_str });
     setCreatedAtObject({ clan_date: clan_date });
-    setWins({ wins_in_percent: wins_in_percent });
+    setAditionalData({
+      wins_in_percent: wins_in_percent,
+      avg_damage_dealt: avg_damage_dealt,
+      acc_created_at: acc_created_at,
+      acc_last_battle_time: acc_last_battle_time,
+      acc_time_in_battle: acc_time_in_battle,
+    });
     setIsLoaded(true);
     forceUpdate();
 
     //console.log('isloaded: ', personalClanDataObject);
   };
 
-  // var acc_id_str = loginDataObject.account_id.toString();
-  // var clan_id_str = Object.byString(
-  //   personalDataObject,
-  //   'data.' + acc_id_str + '.clan_id'
-  // ).toString();
-
   return (
     <SafeAreaProvider>
       <StatusBar hidden></StatusBar>
       {isLoaded ? (
         <View style={styles.sammaryView}>
-          <View style={styles.headerView}>
-            <View style={styles.nicknameView}>
-              <Text style={styles.nicknameText}>
-                {loginDataObject.nickname}
-              </Text>
-            </View>
-            <View style={styles.signOutView}>
-              <Button onPress={() => ''} title='SIGN OUT' color='#f95813' />
-            </View>
-          </View>
           <View style={styles.statsView}>
             <View style={styles.topTextView}>
               <View style={styles.topLeftTextView}>
                 <Text style={styles.headerText}>Battles</Text>
                 <Text style={styles.statsText}>
-                  {Object.byString(
-                    personalDataObject,
-                    'data.' +
-                      personalDataIds.acc_id_str +
-                      '.statistics.all.battles'
-                  ).toLocaleString(undefined, {
-                    maximumFractionDigits: 2,
+                  {numbro(
+                    Object.byString(
+                      personalDataObject,
+                      'data.' +
+                        personalDataIds.acc_id_str +
+                        '.statistics.all.battles'
+                    )
+                  ).format({
+                    thousandSeparated: true,
                   })}
                 </Text>
               </View>
@@ -312,52 +164,76 @@ const PersonalDataScreen = ({ loginDataObject }) => {
               <View style={styles.topRightTextView}>
                 <Text style={styles.headerText}>Victories</Text>
                 <Text style={styles.statsText}>
-                  {wins.wins_in_percent.toLocaleString(undefined, {
-                    maximumFractionDigits: 2,
+                  {numbro(aditionalData.wins_in_percent).format({
+                    thousandSeparated: true,
+                    mantissa: 2,
                   }) + '%'}
                 </Text>
               </View>
             </View>
             <View style={styles.bottomTextView}>
               <View style={styles.bottomLeftTextView}>
-                <Text style={styles.headerText}>Avg Demage</Text>
+                <Text style={styles.headerText}>Avg Damage</Text>
                 <Text style={styles.statsText}>
-                  {/* {Object.byString(
-                    personalDataObject,
-                    'data.' + acc_id_str + '.account_id'
-                  )} */}
-                  1,425
+                  {numbro(aditionalData.avg_damage_dealt).format({
+                    thousandSeparated: true,
+                    mantissa: 0,
+                  })}
                 </Text>
               </View>
               <View style={styles.bottomCenterTextView}>
                 <Text style={styles.headerText}>Personal Rating</Text>
                 <Text style={styles.statsText}>
-                  {/* {Object.byString(
-                    personalDataObject,
-                    'data.' + acc_id_str + '.account_id'
-                  )} */}
-                  8,256
+                  {numbro(
+                    Object.byString(
+                      personalDataObject,
+                      'data.' + personalDataIds.acc_id_str + '.global_rating'
+                    )
+                  ).format({ thousandSeparated: true })}
                 </Text>
               </View>
               <View style={styles.bottomRightTextView}>
                 <Text style={styles.headerText}>Avg XP</Text>
                 <Text style={styles.statsText}>
-                  {/* {Object.byString(
-                    personalDataObject,
-                    'data.' + acc_id_str + '.account_id'
-                  ).toLocaleString(undefined)} */}
-                  720.6
+                  {numbro(
+                    Object.byString(
+                      personalDataObject,
+                      'data.' +
+                        personalDataIds.acc_id_str +
+                        '.statistics.all.battle_avg_xp'
+                    )
+                  ).format({ thousandSeparated: true })}
                 </Text>
               </View>
             </View>
             <View style={styles.bottomBottomTextView}>
               <View style={styles.lastBattleTextView}>
                 <Text style={styles.headerText}>Last Battle:</Text>
-                <Text style={styles.headerText}>10.02.2013</Text>
+                <Text style={styles.headerText}>
+                  {aditionalData.acc_last_battle_time.getDate() +
+                    '.' +
+                    (aditionalData.acc_last_battle_time.getMonth() + 1) +
+                    '.' +
+                    aditionalData.acc_last_battle_time.getFullYear() +
+                    '.'}
+                </Text>
+              </View>
+              <View style={styles.timeInBattlefiled}>
+                <Text style={styles.headerText}>Time in game:</Text>
+                <Text style={styles.headerText}>
+                  {aditionalData.acc_time_in_battle}
+                </Text>
               </View>
               <View style={styles.createdAt}>
                 <Text style={styles.headerText}>Account created:</Text>
-                <Text style={styles.headerText}>10.02.2013</Text>
+                <Text style={styles.headerText}>
+                  {aditionalData.acc_created_at.getDate() +
+                    '.' +
+                    (aditionalData.acc_created_at.getMonth() + 1) +
+                    '.' +
+                    aditionalData.acc_created_at.getFullYear() +
+                    '.'}
+                </Text>
               </View>
             </View>
           </View>
@@ -425,25 +301,53 @@ const PersonalDataScreen = ({ loginDataObject }) => {
                   style={{ width: 90, height: 40, marginTop: 2 }}
                   source={require('../img/gold.png')}></Image> */}
                 <Text style={styles.privateDataText}>Gold: </Text>
-                <Text style={styles.privateDataGoldText}>2514</Text>
+                <Text style={styles.privateDataGoldText}>
+                  {numbro(
+                    Object.byString(
+                      personalDataObject,
+                      'data.' + personalDataIds.acc_id_str + '.private.gold'
+                    )
+                  ).format({ thousandSeparated: true })}
+                </Text>
               </View>
             </View>
             <View style={styles.privateDataView}>
               <View style={{ flex: 1, flexDirection: 'row' }}>
-                <Text style={styles.privateDataText}>Silvers: </Text>
-                <Text style={styles.privateDataText}>85,526,456</Text>
+                <Text style={styles.privateDataText}>Credits: </Text>
+                <Text style={styles.privateDataText}>
+                  {numbro(
+                    Object.byString(
+                      personalDataObject,
+                      'data.' + personalDataIds.acc_id_str + '.private.credits'
+                    )
+                  ).format({ thousandSeparated: true })}
+                </Text>
               </View>
             </View>
             <View style={styles.privateDataView}>
               <View style={{ flex: 1, flexDirection: 'row' }}>
-                <Text style={styles.privateDataText}>Free Expiriance: </Text>
-                <Text style={styles.privateDataText}>126,658</Text>
+                <Text style={styles.privateDataText}>Free Experience: </Text>
+                <Text style={styles.privateDataText}>
+                  {numbro(
+                    Object.byString(
+                      personalDataObject,
+                      'data.' + personalDataIds.acc_id_str + '.private.free_xp'
+                    )
+                  ).format({ thousandSeparated: true })}
+                </Text>
               </View>
             </View>
             <View style={styles.privateDataView}>
               <View style={{ flex: 1, flexDirection: 'row' }}>
                 <Text style={styles.privateDataText}>Bonds: </Text>
-                <Text style={styles.privateDataText}>21,895</Text>
+                <Text style={styles.privateDataText}>
+                  {numbro(
+                    Object.byString(
+                      personalDataObject,
+                      'data.' + personalDataIds.acc_id_str + '.private.bonds'
+                    )
+                  ).format({ thousandSeparated: true })}
+                </Text>
               </View>
             </View>
           </View>

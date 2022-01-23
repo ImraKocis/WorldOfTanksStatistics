@@ -6,10 +6,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MainScreen from '../main_screen/main_screen';
 import PersonalDataScreen from '../personal_data_screen/PersonalDataScreen';
+import LogedInScreen from '../personal_data_screen/LogedInScreen';
 import LoginView from '../login/login';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-const ScreenTabNavigator = ({ loginDataObject }) => {
+const ScreenTabNavigator = ({ loginDataObject, handleSignOutButton }) => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -30,7 +31,11 @@ const ScreenTabNavigator = ({ loginDataObject }) => {
       })}>
       <Tab.Screen name='My Account'>
         {(props) => (
-          <PersonalDataScreen {...props} loginDataObject={loginDataObject} />
+          <LogedInScreen
+            {...props}
+            loginDataObject={loginDataObject}
+            handleSignOutButton={handleSignOutButton}
+          />
         )}
       </Tab.Screen>
 
@@ -42,13 +47,17 @@ const ScreenTabNavigator = ({ loginDataObject }) => {
   );
 };
 
-const LogedInNavigator = ({ loginDataObject }) => {
+const LogedInNavigator = ({ loginDataObject, handleSignOutButton }) => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Home'>
         <Stack.Screen options={{ headerShown: false }} name='Home'>
           {(props) => (
-            <ScreenTabNavigator {...props} loginDataObject={loginDataObject} />
+            <ScreenTabNavigator
+              {...props}
+              loginDataObject={loginDataObject}
+              handleSignOutButton={handleSignOutButton}
+            />
           )}
         </Stack.Screen>
         {/* <Stack.Screen
