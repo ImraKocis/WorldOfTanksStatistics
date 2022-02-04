@@ -14,7 +14,6 @@ import { personalDataStyle } from './personalDataStyle';
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useForceUpdate from '../komponente/forceUpdate';
-import PersonalDataTopTabNavigator from '../navigator/PersonalDataTopTabNavigator';
 import numbro from 'numbro';
 const styles = personalDataStyle;
 const requestOptions = {

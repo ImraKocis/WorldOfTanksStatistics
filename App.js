@@ -20,22 +20,25 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
+const requestOptions = {
+  method: 'POST',
+};
 export default function App() {
   const [isLogedIn, setIsLogedIn] = useState(false);
-  const [isCanclePresed, setIsCanclePresed] = useState(false);
+
   const [loginEndResponseOnlyUrl, setEndLoginResponseOnlyUrl] = useState('');
   const [loginDataObject, setLoginDataObject] = useState(null);
   const forceUpdate = useForceUpdate;
   handleSignOutButton = () => {
     fetch(
       'https://api.worldoftanks.eu/wot/auth/logout/?application_id=3b94e8ffc3a72fc5fcbc1477907b386f&access_token=' +
-        loginDataObject.access_token
-    ).then(setIsLogedIn(false));
+        loginDataObject.access_token,
+      requestOptions
+    )
+      .then(setLoginDataObject(null))
+      .then(setIsLogedIn(false));
   };
-  useEffect(() => {
-    //isCanclePresed && forceUpdate();
-  }, []);
+  useEffect(() => {}, []);
   handleWebViewNavigationStateChange = (newNavState) => {
     const { url } = newNavState;
     if (!url) return;
@@ -60,8 +63,7 @@ export default function App() {
       //console.log(loginDataObject);
       loginDataObject && setIsLogedIn(true);
     } else if (url.includes('status=error')) {
-      //setIsCanclePresed(true);
-      console.log('cancle');
+      console.log('error on auth');
     }
   };
 

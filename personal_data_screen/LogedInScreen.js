@@ -20,8 +20,7 @@ const LogedInScreen = ({ loginDataObject, handleSignOutButton }) => {
         </View>
       </View>
       <PersonalDataTopTabNavigator
-        loginDataObject={loginDataObject}
-        handleSignOutButton={handleSignOutButton}></PersonalDataTopTabNavigator>
+        loginDataObject={loginDataObject}></PersonalDataTopTabNavigator>
     </>
   );
 };

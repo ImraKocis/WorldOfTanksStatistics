@@ -18,11 +18,7 @@ const PersonalDataTopTabNavigator = ({
       }}>
       <Tab.Screen name='PersonalData' options={{ tabBarLabel: 'SUMMARY' }}>
         {(props) => (
-          <PersonalDataScreen
-            {...props}
-            loginDataObject={loginDataObject}
-            handleSignOutButton={handleSignOutButton}
-          />
+          <PersonalDataScreen {...props} loginDataObject={loginDataObject} />
         )}
       </Tab.Screen>
       <Tab.Screen
