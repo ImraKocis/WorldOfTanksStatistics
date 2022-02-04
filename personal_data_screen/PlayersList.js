@@ -4,10 +4,12 @@ import {
   View,
   TouchableOpacity,
   FlatList,
-  SafeAreaView,
+  StatusBar,
 } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import PersonalDataScreenPlayer from './PersonalDataScreenPlayer';
 import React, { useState, useEffect } from 'react';
+import useForceUpdate from '../komponente/forceUpdate';
 
 const requestOptions = {
   method: 'GET',
@@ -15,15 +17,64 @@ const requestOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#2d322d',
+    marginTop: StatusBar.currentHeight || 0,
   },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
+  itemView: {
+    flexDirection: 'row',
+    padding: 10,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 10,
   },
-  title: {
-    fontSize: 32,
+  itemRightView: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  itemLeftView: {
+    flex: 2,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  playerNicknameView: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  playerLastBattleView: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+  },
+  playerWinPercentView: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
+  },
+  playerNumOfBattlesView: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+  },
+  playerWinPercentText: { fontSize: 19, color: 'white' },
+  playerNumOfBattlesText: {
+    color: '#5c5c5c',
+    fontSize: 15,
+    textAlign: 'right',
+  },
+  playerLastBattleText: {
+    color: '#5c5c5c',
+    fontSize: 15,
+    textAlign: 'left',
+  },
+  playerNicknameText: {
+    fontSize: 20,
+    color: 'white',
   },
 });
 const PlayersList = ({ navigator, loginDataObject }) => {
@@ -50,15 +101,27 @@ const PlayersList = ({ navigator, loginDataObject }) => {
     return o;
   };
 
-  const [friendListUngrouped, setFriendListUngrouped] = useState(null); //arr id-a from data.private.ungruped
-  const [friendListGrouped, setFrinedListGrouped] = useState(null); // friends from groups
-  const [friendList, setFrinedList] = useState(null); // all forom frined list
+  // const [friendListUngrouped, setFriendListUngrouped] = useState(null); //arr id-a from data.private.ungruped
+  // const [friendListGrouped, setFrinedListGrouped] = useState(null); // friends from groups
+  const [friendList, setFrinedList] = useState(null); // all from frined list
+  const [isLoaded, setIsLoaded] = useState(false);
+  const forceUpdate = useForceUpdate();
+
   const test = [
     { id: 1, name: 'jedan' },
     { id: 2, name: 'dva' },
   ];
   const getPersonalContacts = async () => {
     const response = await fetch(personalContactsUrl, requestOptions);
+    return await response.json();
+  };
+
+  const getAllContactsData = async (ids) => {
+    const response = await fetch(
+      'https://api.worldoftanks.eu/wot/account/info/?application_id=3b94e8ffc3a72fc5fcbc1477907b386f&account_id=' +
+        ids,
+      requestOptions
+    );
     return await response.json();
   };
 
@@ -69,60 +132,110 @@ const PlayersList = ({ navigator, loginDataObject }) => {
   const loadUrl = async () => {
     var big_str = '';
     const response = await getPersonalContacts();
-
+    let myArray = [];
+    var groupKey;
     var acc_id_str = loginDataObject.account_id.toString();
-    setFriendListUngrouped(
-      Object.byString(
+    // setFriendListUngrouped(
+    //   Object.byString(
+    //     response,
+    //     'data.' + acc_id_str + '.private.grouped_contacts.ungrouped'
+    //   )
+    // );
+    // setFrinedListGrouped(
+    //   Object.byString(
+    //     response,
+    //     'data.' + acc_id_str + '.private.grouped_contacts.groups'
+    //   )
+    // );
+    myArray.push(
+      ...Object.byString(
         response,
         'data.' + acc_id_str + '.private.grouped_contacts.ungrouped'
       )
     );
-    setFrinedListGrouped(
+    groupKey = Object.keys(
       Object.byString(
         response,
         'data.' + acc_id_str + '.private.grouped_contacts.groups'
       )
     );
-    setFrinedList({
-      ungrouped: friendListUngrouped,
-      groups: friendListGrouped,
+    groupKey.forEach((key) => {
+      myArray.push(
+        ...Object.byString(
+          response,
+          'data.' +
+            acc_id_str +
+            '.private.grouped_contacts.groups.' +
+            key.toString()
+        )
+      );
     });
-    // friendListGrouped.map((id) => (big_str += id));
-    console.log(friendList);
+    myArray.forEach((id, index) => {
+      if (index == 0) big_str += id;
+      else big_str += ',' + id;
+    });
+    const main_response = await getAllContactsData(big_str);
+    setFrinedList(main_response);
+    //console.log(friendList);
+    setIsLoaded(true);
+    forceUpdate();
   };
   const Item = ({ nickname, account_id }) => (
     <View style={styles.item}>
-      <Text style={styles.title}>{account_id}</Text>
+      <Text style={styles.title}>{nickname}</Text>
     </View>
   );
-  const renderItem = ({ item }) => <Item title={item.account_id} />;
+  const renderItem = ({ item }) => (
+    <Item account_id={item.account_id} nickname={item.nickname} />
+  );
   return (
-    <SafeAreaView>
-      {friendList ? (
-        test.map((test, index) => (
-          <View
-            key={index}
-            style={{
-              flex: 1,
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text>{test.id}</Text>
-          </View>
-        ))
+    <SafeAreaProvider style={styles.container}>
+      {isLoaded ? (
+        <FlatList
+          data={Object.keys(friendList.data)}
+          renderItem={({ item }) => (
+            <View style={styles.itemView}>
+              <View style={styles.itemLeftView}>
+                <View style={styles.playerNicknameView}>
+                  <Text style={styles.playerNicknameText}>
+                    {friendList.data[item].nickname}
+                  </Text>
+                </View>
+                <View style={styles.playerLastBattleView}>
+                  <Text style={styles.playerLastBattleText}>
+                    {/* {friendList.data[item].nickname} */}
+                    last battle
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.itemRightView}>
+                <View style={styles.playerWinPercentView}>
+                  <Text style={styles.playerWinPercentText}>
+                    {/* {friendList.data[item].nickname} */}
+                    50.5%
+                  </Text>
+                </View>
+                <View style={styles.playerNumOfBattlesView}>
+                  <Text style={styles.playerNumOfBattlesText}>
+                    {/* {friendList.data[item].nickname} */}53,465
+                  </Text>
+                </View>
+              </View>
+            </View>
+          )}
+          keyExtractor={(item) => friendList.data[item].account_id}
+        />
       ) : (
         <View
           style={{
             flex: 1,
-            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <Text>loading...</Text>
+          <Text>Loading...</Text>
         </View>
       )}
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 

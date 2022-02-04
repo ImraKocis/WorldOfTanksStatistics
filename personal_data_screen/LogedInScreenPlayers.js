@@ -11,13 +11,7 @@ const styles = personalDataStyle;
 const LogedInScreenPlayers = ({ loginDataObject }) => {
   return (
     <>
-      <Stack.Navigator initialRouteName='Player'>
-        <Stack.Screen options={{ headerShown: false }} name='Player'>
-          {(props) => (
-            <PlayersList {...props} loginDataObject={loginDataObject} />
-          )}
-        </Stack.Screen>
-      </Stack.Navigator>
+      <PlayersList loginDataObject={loginDataObject} />
     </>
   );
 };
