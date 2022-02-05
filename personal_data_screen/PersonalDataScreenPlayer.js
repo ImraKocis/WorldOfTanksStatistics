@@ -10,7 +10,7 @@ const PersonalDataScreenPlayer = () => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <Text>Players</Text>
+      <Text>Player data</Text>
     </View>
   );
 };

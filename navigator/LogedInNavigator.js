@@ -7,6 +7,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MainScreen from '../main_screen/main_screen';
 import LogedInScreen from '../personal_data_screen/LogedInScreen';
 import LogedInScreenPlayers from '../personal_data_screen/LogedInScreenPlayers';
+import PersonalPlayerDataNavigator from './PersonalPlayerDataNavigator';
 import LoginView from '../login/login';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,7 +42,10 @@ const ScreenTabNavigator = ({ loginDataObject, handleSignOutButton }) => {
 
       <Tab.Screen name='Players'>
         {(props) => (
-          <LogedInScreenPlayers {...props} loginDataObject={loginDataObject} />
+          <PersonalPlayerDataNavigator
+            {...props}
+            loginDataObject={loginDataObject}
+          />
         )}
       </Tab.Screen>
     </Tab.Navigator>
