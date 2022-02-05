@@ -8,8 +8,10 @@ import {
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import PersonalDataScreenPlayer from './PersonalDataScreenPlayer';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import useForceUpdate from '../komponente/forceUpdate';
+import numbro from 'numbro';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const requestOptions = {
   method: 'GET',
@@ -18,7 +20,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#2d322d',
-    marginTop: StatusBar.currentHeight || 0,
   },
   itemView: {
     flexDirection: 'row',
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
-const PlayersList = ({ navigator, loginDataObject }) => {
+const PlayersList = ({ navigation, loginDataObject }) => {
   //https://api.worldoftanks.eu/wot/account/info/?application_id=3b94e8ffc3a72fc5fcbc1477907b386f&account_id=508372217&access_token=55e6d13518240a80f158aff285300b569d38a4df&extra=private.grouped_contacts
   const personalContactsUrl =
     'https://api.worldoftanks.eu/wot/account/info/?application_id=3b94e8ffc3a72fc5fcbc1477907b386f&account_id=' +
@@ -180,50 +181,86 @@ const PlayersList = ({ navigator, loginDataObject }) => {
     setIsLoaded(true);
     forceUpdate();
   };
-  const Item = ({ nickname, account_id }) => (
-    <View style={styles.item}>
-      <Text style={styles.title}>{nickname}</Text>
-    </View>
+  const Item = ({
+    nickname,
+    account_id,
+    battles,
+    lastBattleTimestamp,
+    winPercent,
+    navigation,
+  }) => (
+    <TouchableOpacity
+      onPress={() => navigation.navigate('Player', { account_id: account_id })}>
+      <View style={styles.itemView}>
+        <View style={styles.itemLeftView}>
+          <View style={styles.playerNicknameView}>
+            <Text style={styles.playerNicknameText}>{nickname}</Text>
+          </View>
+          <View style={styles.playerLastBattleView}>
+            <MaterialCommunityIcons
+              style={{ marginBottom: 2 }}
+              name='sword'
+              size={14}
+              color='#5c5c5c'
+            />
+            <Text style={styles.playerLastBattleText}>
+              {lastBattleTimestamp.getDate() +
+                '.' +
+                (lastBattleTimestamp.getMonth() + 1) +
+                '.' +
+                lastBattleTimestamp.getFullYear() +
+                '. at ' +
+                lastBattleTimestamp.getHours() +
+                ':' +
+                lastBattleTimestamp.getMinutes()}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.itemRightView}>
+          <View style={styles.playerWinPercentView}>
+            <Text style={styles.playerWinPercentText}>{winPercent}</Text>
+          </View>
+          <View style={styles.playerNumOfBattlesView}>
+            <Text style={styles.playerNumOfBattlesText}>
+              {numbro(battles).format({ thousandSeparated: true })}
+            </Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
   );
   const renderItem = ({ item }) => (
-    <Item account_id={item.account_id} nickname={item.nickname} />
+    <Item
+      navigation={navigation}
+      account_id={friendList.data[item].account_id}
+      nickname={friendList.data[item].nickname}
+      battles={friendList.data[item].statistics.all.battles}
+      lastBattleTimestamp={
+        new Date(friendList.data[item].last_battle_time * 1000)
+      }
+      winPercent={
+        numbro(
+          (friendList.data[item].statistics.all.wins /
+            friendList.data[item].statistics.all.battles) *
+            100
+        ).format({
+          thousandSeparated: true,
+          mantissa: 2,
+        }) + '%'
+      }
+    />
   );
+
+  const keyExtractor = useCallback((item) => friendList.data[item].account_id);
+
   return (
     <SafeAreaProvider style={styles.container}>
       {isLoaded ? (
         <FlatList
           data={Object.keys(friendList.data)}
-          renderItem={({ item }) => (
-            <View style={styles.itemView}>
-              <View style={styles.itemLeftView}>
-                <View style={styles.playerNicknameView}>
-                  <Text style={styles.playerNicknameText}>
-                    {friendList.data[item].nickname}
-                  </Text>
-                </View>
-                <View style={styles.playerLastBattleView}>
-                  <Text style={styles.playerLastBattleText}>
-                    {/* {friendList.data[item].nickname} */}
-                    last battle
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.itemRightView}>
-                <View style={styles.playerWinPercentView}>
-                  <Text style={styles.playerWinPercentText}>
-                    {/* {friendList.data[item].nickname} */}
-                    50.5%
-                  </Text>
-                </View>
-                <View style={styles.playerNumOfBattlesView}>
-                  <Text style={styles.playerNumOfBattlesText}>
-                    {/* {friendList.data[item].nickname} */}53,465
-                  </Text>
-                </View>
-              </View>
-            </View>
-          )}
-          keyExtractor={(item) => friendList.data[item].account_id}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          navigation={navigation}
         />
       ) : (
         <View
