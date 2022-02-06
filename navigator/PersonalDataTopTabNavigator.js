@@ -21,16 +21,14 @@ const PersonalDataTopTabNavigator = ({
           <PersonalDataScreen {...props} loginDataObject={loginDataObject} />
         )}
       </Tab.Screen>
-      <Tab.Screen
-        name='PersonalVehicles'
-        component={PersonalVehicles}
-        options={{ tabBarLabel: 'VEHICLES' }}
-      />
+
       <Tab.Screen
         name='PersonalAchievements'
-        component={PersonalAchievements}
-        options={{ tabBarLabel: 'ACHIEVEMENTS' }}
-      />
+        options={{ tabBarLabel: 'ACHIEVEMENTS' }}>
+        {(props) => (
+          <PersonalAchievements {...props} loginDataObject={loginDataObject} />
+        )}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };

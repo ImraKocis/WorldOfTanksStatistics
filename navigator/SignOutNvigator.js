@@ -6,6 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import MainScreen from '../main_screen/main_screen';
 import PersonalDataScreen from '../personal_data_screen/PersonalDataScreen';
+import SearchNavigator from './SearchNavigator';
 import LoginView from '../login/login';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -14,13 +15,14 @@ const ScreenTabNavigator = (props) => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
+        tabBarHideOnKeyboard: true,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
           if (route.name === 'LogIn') {
             iconName = focused ? 'ios-log-in' : 'ios-log-in-outline';
-          } else if (route.name === 'Players') {
-            iconName = focused ? 'ios-people' : 'ios-people-outline';
+          } else if (route.name === 'Search') {
+            iconName = focused ? 'ios-search' : 'ios-search-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -30,7 +32,9 @@ const ScreenTabNavigator = (props) => {
       })}>
       <Tab.Screen name='LogIn' component={MainScreen}></Tab.Screen>
 
-      <Tab.Screen name='Players' component={PersonalDataScreen}></Tab.Screen>
+      <Tab.Screen name='Search'>
+        {(props) => <SearchNavigator {...props} />}
+      </Tab.Screen>
 
       {/* <Drawer.Screen name='Tenkopedia'></Drawer.Screen> */}
       {/* <Drawer.Screen name='Clans'></Drawer.Screen> */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, StatusBar } from 'react-native';
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useForceUpdate from '../komponente/forceUpdate';
@@ -22,6 +22,7 @@ const PersonalDataScreenPlayer = ({ route }) => {
   const [playerDataIds, setPlayerDataIds] = useState(null);
   const [aditionalData, setAditionalData] = useState(null);
   const [aditionalClanData, setAditionalClanData] = useState(null);
+  const [search, setSearch] = useState('');
   const forceUpdate = useForceUpdate();
 
   Object.byString = function (o, s) {
@@ -68,7 +69,7 @@ const PersonalDataScreenPlayer = ({ route }) => {
     );
 
     //console.log('clan id:' + player_clan_id);
-    //rijesit logiku s clan_id i pozivom ako je null
+
     if (player_clan_id !== null) {
       var clan_id_str = player_clan_id.toString();
       const clan_response = await getPlayersClanData(player_clan_id);
@@ -129,6 +130,7 @@ const PersonalDataScreenPlayer = ({ route }) => {
   //console.log(route.params.account_id);
   return (
     <SafeAreaProvider>
+      <StatusBar hidden></StatusBar>
       {isLoaded ? (
         <View style={styles.sammaryView}>
           <View style={styles.statsViewPlayer}>

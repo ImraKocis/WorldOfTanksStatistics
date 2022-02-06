@@ -8,6 +8,7 @@ import MainScreen from '../main_screen/main_screen';
 import LogedInScreen from '../personal_data_screen/LogedInScreen';
 import LogedInScreenPlayers from '../personal_data_screen/LogedInScreenPlayers';
 import PersonalPlayerDataNavigator from './PersonalPlayerDataNavigator';
+import SearchNavigator from './SearchNavigator';
 import LoginView from '../login/login';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -16,6 +17,7 @@ const ScreenTabNavigator = ({ loginDataObject, handleSignOutButton }) => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
+        tabBarHideOnKeyboard: true,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
@@ -23,6 +25,8 @@ const ScreenTabNavigator = ({ loginDataObject, handleSignOutButton }) => {
             iconName = focused ? 'ios-person' : 'ios-person-outline';
           } else if (route.name === 'Players') {
             iconName = focused ? 'ios-people' : 'ios-people-outline';
+          } else if (route.name === 'Search') {
+            iconName = focused ? 'ios-search' : 'ios-search-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -47,6 +51,9 @@ const ScreenTabNavigator = ({ loginDataObject, handleSignOutButton }) => {
             loginDataObject={loginDataObject}
           />
         )}
+      </Tab.Screen>
+      <Tab.Screen name='Search'>
+        {(props) => <SearchNavigator {...props} />}
       </Tab.Screen>
     </Tab.Navigator>
   );
