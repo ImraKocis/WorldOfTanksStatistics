@@ -136,6 +136,16 @@ export const personalDataStyle = StyleSheet.create({
     backgroundColor: '#3b3b3b',
     borderRadius: 10,
   },
+  statsViewPlayer: {
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    flex: 0.8,
+    elevation: 5,
+    shadowRadius: 5,
+    backgroundColor: '#3b3b3b',
+    borderRadius: 10,
+  },
   nicknameText: { fontSize: 22, color: 'white' },
   nicknameView: {
     flex: 1,
