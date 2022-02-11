@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, FlatList, StatusBar, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Image,
+} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useForceUpdate from '../komponente/forceUpdate';
 
@@ -48,42 +55,56 @@ const PersonalAchievements = ({ loginDataObject }) => {
     const response_my_ach = await getAchievements();
     const response_all_ach = await getAllAchievements();
     var acc_id_str = loginDataObject.account_id.toString();
+    var arr_of_ach = [];
     setAchievementsObject(response_my_ach);
     setAllAchievements(response_all_ach);
     Object.entries(response_all_ach.data).forEach(([key, ach_all]) => {
       Object.entries(
         Object.byString(response_my_ach, 'data.' + acc_id_str + '.achievements')
       ).forEach(([key2, ach_my]) => {
-        if (ach_all.name == key2) {
-          setFilteredAchievements({
-            ...filteredAchievements,
-            achievement: { ach: ach_all, num_of_ach: ach_my },
+        if (key == key2) {
+          arr_of_ach.push({
+            ach: ach_all,
+            num_of_ach: ach_my,
           });
+          //console.log('all_ach_key: ' + key + ' == ' + key2 + ' :my_ach_key');
         }
       });
     });
+    const preparedData = arr_of_ach.map(
+      ({ ach: { name_i18n, image_big, name }, num_of_ach }) => {
+        return {
+          ach_name: name_i18n,
+          ach_image: image_big,
+          ach_number: num_of_ach,
+          id: name,
+        };
+      }
+    );
+    setFilteredAchievements(preparedData);
+    console.log(filteredAchievements);
     setIsLoaded(true);
   };
-  const renderItem = ({ item }) => (
-    <Item
-      ach_name={filteredAchievements.achievement.ach[item].name_i18n}
-      ach_img={filteredAchievements.achievement.ach[item].name_i18n}
-      num_of_ach={filteredAchievements.achievement.num_of_ach}
-    />
-  );
-  const Item = ({}) => (
+  const renderItem = ({ item }) => <Item item={item} />;
+  const Item = ({ item }) => (
     <View>
-      <Text>pero</Text>
+      <Image
+        source={{
+          uri: item.ach_image,
+        }}
+        style={{ height: 100, width: 100 }}></Image>
     </View>
   );
+  const keyExtractor = (item) => item.id;
 
   return (
     <View style={styles.mainView}>
       <SafeAreaProvider>
         {isLoaded ? (
           <FlatList
-            data={Object.keys(filteredAchievements.achievement.ach)}
+            data={filteredAchievements}
             renderItem={renderItem}
+            keyExtractor={keyExtractor}
           />
         ) : (
           <View style={styles.loading}>
@@ -108,6 +129,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  loadingText: { color: 'white' },
+  loadingText: { color: 'black' },
 });
 export default PersonalAchievements;

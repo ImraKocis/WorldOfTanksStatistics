@@ -45,9 +45,9 @@ const LoginView = ({ handleWebViewNavigationStateChange }) => {
   const loadUrl = async () => {
     const response = await getLoginUrl();
     setLoginFormUrl(response);
+    console.log('isloaded: ', isLoaded);
     setIsLoaded(true);
     forceUpdate();
-    console.log('isloaded: ', isLoaded);
   };
 
   return (
