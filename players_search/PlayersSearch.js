@@ -6,7 +6,6 @@ import {
   View,
   KeyboardAvoidingView,
   Dimensions,
-  FlatList,
   ScrollView,
   StatusBar,
 } from 'react-native';
@@ -42,10 +41,8 @@ const PlayersSearch = ({ navigation }) => {
     const response = await getSearched(search);
     setSearchList(response);
     setIsLading(false);
-    console.log(response);
     if (response.meta.count >= 1) setIsSearchTrue(true);
     else setIsSearchTrue(false);
-    // forceUpdate();
   };
 
   Object.byString = function (o, s) {

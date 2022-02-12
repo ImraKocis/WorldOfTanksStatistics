@@ -7,7 +7,6 @@ import {
   StatusBar,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import PersonalDataScreenPlayer from './PersonalDataScreenPlayer';
 import React, { useState, useEffect, useCallback } from 'react';
 import useForceUpdate from '../komponente/forceUpdate';
 import numbro from 'numbro';
@@ -79,7 +78,6 @@ const styles = StyleSheet.create({
   },
 });
 const PlayersList = ({ navigation, loginDataObject }) => {
-  //https://api.worldoftanks.eu/wot/account/info/?application_id=3b94e8ffc3a72fc5fcbc1477907b386f&account_id=508372217&access_token=55e6d13518240a80f158aff285300b569d38a4df&extra=private.grouped_contacts
   const personalContactsUrl =
     'https://api.worldoftanks.eu/wot/account/info/?application_id=3b94e8ffc3a72fc5fcbc1477907b386f&account_id=' +
     loginDataObject.account_id +
@@ -102,16 +100,10 @@ const PlayersList = ({ navigation, loginDataObject }) => {
     return o;
   };
 
-  // const [friendListUngrouped, setFriendListUngrouped] = useState(null); //arr id-a from data.private.ungruped
-  // const [friendListGrouped, setFrinedListGrouped] = useState(null); // friends from groups
   const [friendList, setFrinedList] = useState(null); // all from frined list
   const [isLoaded, setIsLoaded] = useState(false);
   const forceUpdate = useForceUpdate();
 
-  const test = [
-    { id: 1, name: 'jedan' },
-    { id: 2, name: 'dva' },
-  ];
   const getPersonalContacts = async () => {
     const response = await fetch(personalContactsUrl, requestOptions);
     return await response.json();
@@ -136,18 +128,7 @@ const PlayersList = ({ navigation, loginDataObject }) => {
     let myArray = [];
     var groupKey;
     var acc_id_str = loginDataObject.account_id.toString();
-    // setFriendListUngrouped(
-    //   Object.byString(
-    //     response,
-    //     'data.' + acc_id_str + '.private.grouped_contacts.ungrouped'
-    //   )
-    // );
-    // setFrinedListGrouped(
-    //   Object.byString(
-    //     response,
-    //     'data.' + acc_id_str + '.private.grouped_contacts.groups'
-    //   )
-    // );
+
     myArray.push(
       ...Object.byString(
         response,
@@ -177,7 +158,7 @@ const PlayersList = ({ navigation, loginDataObject }) => {
     });
     const main_response = await getAllContactsData(big_str);
     setFrinedList(main_response);
-    //console.log(friendList);
+
     setIsLoaded(true);
     forceUpdate();
   };
@@ -269,7 +250,7 @@ const PlayersList = ({ navigation, loginDataObject }) => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <Text>Loading...</Text>
+          <Text style={{ color: 'white' }}>Loading...</Text>
         </View>
       )}
     </SafeAreaProvider>

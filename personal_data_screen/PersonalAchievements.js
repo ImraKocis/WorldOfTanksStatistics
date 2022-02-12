@@ -3,9 +3,9 @@ import {
   View,
   Text,
   FlatList,
-  StatusBar,
   StyleSheet,
   Image,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useForceUpdate from '../komponente/forceUpdate';
@@ -15,11 +15,9 @@ const requestOptions = {
 };
 
 const PersonalAchievements = ({ loginDataObject }) => {
-  const [achievementsObject, setAchievementsObject] = useState(null);
-  const [allAchievements, setAllAchievements] = useState(null);
   const [filteredAchievements, setFilteredAchievements] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [aditionalData, setAditionalData] = useState(null);
+
   const forceUpdate = useForceUpdate();
   const url_all_ach =
     'https://api.worldoftanks.eu/wot/encyclopedia/achievements/?application_id=3b94e8ffc3a72fc5fcbc1477907b386f';
@@ -56,8 +54,6 @@ const PersonalAchievements = ({ loginDataObject }) => {
     const response_all_ach = await getAllAchievements();
     var acc_id_str = loginDataObject.account_id.toString();
     var arr_of_ach = [];
-    setAchievementsObject(response_my_ach);
-    setAllAchievements(response_all_ach);
     Object.entries(response_all_ach.data).forEach(([key, ach_all]) => {
       Object.entries(
         Object.byString(response_my_ach, 'data.' + acc_id_str + '.achievements')
@@ -67,32 +63,52 @@ const PersonalAchievements = ({ loginDataObject }) => {
             ach: ach_all,
             num_of_ach: ach_my,
           });
-          //console.log('all_ach_key: ' + key + ' == ' + key2 + ' :my_ach_key');
         }
       });
     });
     const preparedData = arr_of_ach.map(
-      ({ ach: { name_i18n, image_big, name }, num_of_ach }) => {
+      ({
+        ach: { name_i18n, image_big, name, options, description },
+        num_of_ach,
+      }) => {
         return {
           ach_name: name_i18n,
+          ach_description: description,
           ach_image: image_big,
           ach_number: num_of_ach,
+          ach_options: options,
           id: name,
         };
       }
     );
     setFilteredAchievements(preparedData);
-    console.log(filteredAchievements);
     setIsLoaded(true);
   };
   const renderItem = ({ item }) => <Item item={item} />;
+
   const Item = ({ item }) => (
-    <View>
-      <Image
-        source={{
-          uri: item.ach_image,
-        }}
-        style={{ height: 100, width: 100 }}></Image>
+    <View style={styles.itemCard}>
+      <View style={styles.itemCardNumber}>
+        <Text style={styles.numberText}>{item.ach_number}</Text>
+      </View>
+      <View style={styles.imageView}>
+        {item.ach_image ? (
+          <Image
+            source={{
+              uri: item.ach_image,
+            }}
+            style={{ height: 100, width: 100 }}></Image>
+        ) : (
+          <Image
+            source={{
+              uri: item.ach_options[0].image_big,
+            }}
+            style={{ height: 100, width: 100 }}></Image>
+        )}
+      </View>
+      <View style={styles.textView}>
+        <Text style={styles.itemText}>{item.ach_name}</Text>
+      </View>
     </View>
   );
   const keyExtractor = (item) => item.id;
@@ -102,9 +118,11 @@ const PersonalAchievements = ({ loginDataObject }) => {
       <SafeAreaProvider>
         {isLoaded ? (
           <FlatList
+            horizontal={false}
             data={filteredAchievements}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
+            numColumns={3}
           />
         ) : (
           <View style={styles.loading}>
@@ -117,11 +135,9 @@ const PersonalAchievements = ({ loginDataObject }) => {
 };
 const styles = StyleSheet.create({
   mainView: {
-    marginTop: StatusBar.currentHeight,
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#2d322d',
   },
   loading: {
     flex: 1,
@@ -130,5 +146,44 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   loadingText: { color: 'black' },
+  itemCard: {
+    maxWidth: Dimensions.get('window').width / 3 - 10, // Width / 3 - (marginLeft and marginRight for the components)
+    elevation: 5,
+    marginTop: 5,
+    marginLeft: 10,
+    marginBottom: 10,
+    marginRight: 10,
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#3b3b3b',
+  },
+  itemCardNumber: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginLeft: 7,
+  },
+  imageView: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textView: {
+    flex: 0.3,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    marginBottom: 5,
+  },
+  itemText: {
+    color: '#858585',
+    fontSize: 15,
+  },
+  numberText: {
+    fontSize: 20,
+    color: 'white',
+  },
 });
 export default PersonalAchievements;

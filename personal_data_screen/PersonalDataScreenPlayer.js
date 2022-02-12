@@ -68,13 +68,11 @@ const PersonalDataScreenPlayer = ({ route }) => {
       'data.' + acc_id_str + '.clan_id'
     );
 
-    //console.log('clan id:' + player_clan_id);
-
     if (player_clan_id !== null) {
       var clan_id_str = player_clan_id.toString();
       const clan_response = await getPlayersClanData(player_clan_id);
       setPlayersClanObject(clan_response);
-      //console.log(clan_response);
+
       setIsInClan(true);
       var clan_created_at = new Date(
         Object.byString(clan_response, 'data.' + clan_id_str + '.created_at') *
@@ -122,12 +120,11 @@ const PersonalDataScreenPlayer = ({ route }) => {
       player_clan_id: player_clan_id,
       acc_id_str: acc_id_str,
     });
-    //console.log('data: ' + aditionalData);
+
     setIsLoaded(true);
     forceUpdate();
   };
 
-  //console.log(route.params.account_id);
   return (
     <SafeAreaProvider>
       <StatusBar hidden></StatusBar>

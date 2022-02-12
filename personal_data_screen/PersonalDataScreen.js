@@ -1,17 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-  Image,
-  Button,
-  ScrollView,
-  SafeAreaView,
-  Settings,
-} from 'react-native';
+import { View, Text, StatusBar, Image } from 'react-native';
 import { personalDataStyle } from './personalDataStyle';
-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useForceUpdate from '../komponente/forceUpdate';
 import numbro from 'numbro';
@@ -34,8 +23,7 @@ const PersonalDataScreen = ({ loginDataObject }) => {
     '&application_id=3b94e8ffc3a72fc5fcbc1477907b386f&access_token=' +
     loginDataObject.access_token +
     '&extra=statistics.random%2C+statistics.ranked_10x10';
-  // console.log(loginDataObject);
-  // console.log(personalDataUrl);
+
   Object.byString = function (o, s) {
     s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
     s = s.replace(/^\./, ''); // strip a leading dot
@@ -130,8 +118,6 @@ const PersonalDataScreen = ({ loginDataObject }) => {
     });
     setIsLoaded(true);
     forceUpdate();
-
-    //console.log('isloaded: ', personalClanDataObject);
   };
 
   return (
@@ -296,9 +282,6 @@ const PersonalDataScreen = ({ loginDataObject }) => {
           <View style={styles.privateDataPaper}>
             <View style={styles.privateDataView}>
               <View style={{ flex: 1, flexDirection: 'row' }}>
-                {/* <Image
-                  style={{ width: 90, height: 40, marginTop: 2 }}
-                  source={require('../img/gold.png')}></Image> */}
                 <Text style={styles.privateDataText}>Gold: </Text>
                 <Text style={styles.privateDataGoldText}>
                   {numbro(

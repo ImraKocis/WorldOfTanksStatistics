@@ -1,13 +1,9 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import PersonalAchievements from '../personal_data_screen/PersonalAchievements';
-import PersonalVehicles from '../personal_data_screen/PersonalVehicles';
 import PersonalDataScreen from '../personal_data_screen/PersonalDataScreen';
 const Tab = createMaterialTopTabNavigator();
-const PersonalDataTopTabNavigator = ({
-  loginDataObject,
-  handleSignOutButton,
-}) => {
+const PersonalDataTopTabNavigator = ({ loginDataObject }) => {
   return (
     <Tab.Navigator
       initialRouteName='PersonalData'

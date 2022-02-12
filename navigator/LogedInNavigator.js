@@ -3,13 +3,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import MainScreen from '../main_screen/main_screen';
 import LogedInScreen from '../personal_data_screen/LogedInScreen';
-import LogedInScreenPlayers from '../personal_data_screen/LogedInScreenPlayers';
 import PersonalPlayerDataNavigator from './PersonalPlayerDataNavigator';
 import SearchNavigator from './SearchNavigator';
-import LoginView from '../login/login';
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const ScreenTabNavigator = ({ loginDataObject, handleSignOutButton }) => {

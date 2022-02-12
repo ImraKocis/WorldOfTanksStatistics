@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Button, StatusBar } from 'react-native';
-import { useSafeAreaFrame } from 'react-native-safe-area-context';
-import { WebView } from 'react-native-webview';
-import LoginView from './login/login';
-import MainScreen from './main_screen/main_screen';
-import WithoutLoginView from './without_login/WithoutLoginView';
-import PersonalDataScreen from './personal_data_screen/PersonalDataScreen';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
+import reactNativeClearAppCache from 'react-native-clear-app-cache';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SignOutNvigator from './navigator/SignOutNvigator';
 import LogedInNavigator from './navigator/LogedInNavigator';
 import useForceUpdate from './komponente/forceUpdate';
@@ -26,7 +17,6 @@ const requestOptions = {
 export default function App() {
   const [isLogedIn, setIsLogedIn] = useState(false);
 
-  const [loginEndResponseOnlyUrl, setEndLoginResponseOnlyUrl] = useState('');
   const [loginDataObject, setLoginDataObject] = useState(null);
   const forceUpdate = useForceUpdate;
   handleSignOutButton = () => {
@@ -37,6 +27,8 @@ export default function App() {
     )
       .then(setLoginDataObject(null))
       .then(setIsLogedIn(false));
+
+    reactNativeClearAppCache.clearAppCache();
   };
   useEffect(() => {}, []);
   handleWebViewNavigationStateChange = (newNavState) => {
@@ -44,7 +36,6 @@ export default function App() {
     if (!url) return;
     var status, access_token, nickname, account_id, expires_at;
     if (url.includes('status=ok')) {
-      setEndLoginResponseOnlyUrl(url);
       const arrLogin = url.split('&');
 
       status = arrLogin[1].split('=');
@@ -60,15 +51,12 @@ export default function App() {
         account_id: account_id[1],
         expires_at: expires_at[1],
       });
-      //console.log(loginDataObject);
+
       loginDataObject && setIsLogedIn(true);
     } else if (url.includes('status=error')) {
       console.log('error on auth');
     }
   };
-
-  const Stack = createNativeStackNavigator();
-  const Tab = createBottomTabNavigator();
 
   return (
     <SafeAreaProvider>
@@ -84,40 +72,6 @@ export default function App() {
           handleSignOutButton={handleSignOutButton}
         />
       )}
-
-      {/* <StatusBar hidden></StatusBar> */}
-      {/* <NavigationContainer>
-        <Stack.Navigator initialRouteName='Home'>
-          <Stack.Screen
-            options={{ headerShown: false }}
-            name='Home'
-            component={HomeTabs}></Stack.Screen>
-          <Stack.Screen name='Login'>
-            {(props) => (
-              <LoginView
-                {...props}
-                handleWebViewNavigationStateChange={
-                  handleWebViewNavigationStateChange
-                }
-              />
-            )}
-          </Stack.Screen>
-        </Stack.Navigator>
-      </NavigationContainer> */}
     </SafeAreaProvider>
-    // <View style={styles.appView}>
-    //   {isLoginPressed ? (
-    //     <LoginView
-    //       handleWebViewNavigationStateChange={
-    //         handleWebViewNavigationStateChange
-    //       }
-    //     />
-    //   ) : (
-    //     <MainScreen
-    //       handleLoginButton={handleLoginButton}
-    //       handleWithOutLoginButton={handleWithOutLoginButton}
-    //     />
-    //   )}
-    // </View>
   );
 }

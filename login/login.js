@@ -1,15 +1,11 @@
-import react, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { render } from 'react-dom';
-import LoadingService from './services/loadingService';
-import React from 'react';
 import useForceUpdate from '../komponente/forceUpdate';
 
 const requestOptions = {
@@ -29,7 +25,6 @@ function LoadingIndicatorView() {
 const LoginView = ({ handleWebViewNavigationStateChange }) => {
   const [loginFormUrl, setLoginFormUrl] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [loginResponse, setLoginResponse] = useState([]);
   const forceUpdate = useForceUpdate();
   const getLoginUrl = async () => {
     const response = await fetch(
@@ -56,8 +51,6 @@ const LoginView = ({ handleWebViewNavigationStateChange }) => {
         <WebView
           source={{ uri: loginFormUrl.data.location }}
           onNavigationStateChange={handleWebViewNavigationStateChange}
-          //renderLoading={LoadingIndicatorView}
-          //startInLoadingState={true}
         />
       ) : (
         <View style={styles.loading}>
