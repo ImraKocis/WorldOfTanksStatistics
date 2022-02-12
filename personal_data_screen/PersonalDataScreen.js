@@ -15,6 +15,7 @@ const PersonalDataScreen = ({ loginDataObject }) => {
   const [aditionalData, setAditionalData] = useState(null);
   const [createdAtObject, setCreatedAtObject] = useState(null);
   const [personalDataIds, setPersonaldataIds] = useState(null);
+  const [isInClan, setIsInClan] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const forceUpdate = useForceUpdate();
 
@@ -69,7 +70,7 @@ const PersonalDataScreen = ({ loginDataObject }) => {
     var clan_id_str = Object.byString(
       response,
       'data.' + acc_id_str + '.clan_id'
-    ).toString();
+    );
     var battles = Object.byString(
       response,
       'data.' + acc_id_str + '.statistics.all.battles'
@@ -96,20 +97,28 @@ const PersonalDataScreen = ({ loginDataObject }) => {
       response,
       'data.' + acc_id_str + '.private.battle_life_time'
     );
-    const clanResponse = await getPersonalClanData(clan_id_str);
-    var clan_created_at_timestamp = Object.byString(
-      clanResponse,
-      'data.' + clan_id_str + '.created_at'
-    );
+    if (clan_id_str !== null) {
+      var clan_id_actual_string = clan_id_str.toString();
+      const clanResponse = await getPersonalClanData(clan_id_actual_string);
+      setPersonalClanDataObject(clanResponse);
+      var clan_created_at_timestamp = Object.byString(
+        clanResponse,
+        'data.' + clan_id_actual_string + '.created_at'
+      );
 
-    var clan_date = new Date(clan_created_at_timestamp * 1000);
+      var clan_date = new Date(clan_created_at_timestamp * 1000);
+      setCreatedAtObject({ clan_date: clan_date });
+      setIsInClan(true);
+    } else {
+      setIsInClan(false);
+    }
+
     var acc_created_at = new Date(acc_created_timestamp * 1000);
     var acc_time_in_battle = secondsToHours(timeInBattleInSec);
     var acc_last_battle_time = new Date(acc_last_battle_timestpam * 1000);
 
-    setPersonalClanDataObject(clanResponse);
     setPersonaldataIds({ acc_id_str: acc_id_str, clan_id_str: clan_id_str });
-    setCreatedAtObject({ clan_date: clan_date });
+
     setAditionalData({
       wins_in_percent: wins_in_percent,
       avg_damage_dealt: avg_damage_dealt,
@@ -223,62 +232,67 @@ const PersonalDataScreen = ({ loginDataObject }) => {
               </View>
             </View>
           </View>
-
-          <View style={styles.clanPaper}>
-            <View style={styles.clanContainer}>
-              <View style={styles.clanEmblemView}>
-                <Image
-                  source={{
-                    uri: Object.byString(
+          {isInClan ? (
+            <View style={styles.clanPaper}>
+              <View style={styles.clanContainer}>
+                <View style={styles.clanEmblemView}>
+                  <Image
+                    source={{
+                      uri: Object.byString(
+                        personalClanDataObject,
+                        'data.' +
+                          personalDataIds.clan_id_str +
+                          '.emblems.x64.wot'
+                      ),
+                    }}
+                    style={{ height: 64, width: 64 }}></Image>
+                </View>
+                <View style={styles.clanTagNameView}>
+                  <Text
+                    style={{
+                      color: Object.byString(
+                        personalClanDataObject,
+                        'data.' + personalDataIds.clan_id_str + '.color'
+                      ),
+                      fontSize: 25,
+                    }}>
+                    {'['}
+                    {Object.byString(
                       personalClanDataObject,
-                      'data.' + personalDataIds.clan_id_str + '.emblems.x64.wot'
-                    ),
-                  }}
-                  style={{ height: 64, width: 64 }}></Image>
-              </View>
-              <View style={styles.clanTagNameView}>
-                <Text
-                  style={{
-                    color: Object.byString(
-                      personalClanDataObject,
-                      'data.' + personalDataIds.clan_id_str + '.color'
-                    ),
-                    fontSize: 25,
-                  }}>
-                  {'['}
-                  {Object.byString(
-                    personalClanDataObject,
-                    'data.' + personalDataIds.clan_id_str + '.tag'
-                  )}
-                  {']'}
-                </Text>
-                <Text style={styles.clanNameText}>
-                  {Object.byString(
-                    personalClanDataObject,
-                    'data.' + personalDataIds.clan_id_str + '.name'
-                  )}
-                </Text>
-                <Text style={styles.clanMembersCountText}>
-                  {'Members ' +
-                    Object.byString(
-                      personalClanDataObject,
-                      'data.' + personalDataIds.clan_id_str + '.members_count'
+                      'data.' + personalDataIds.clan_id_str + '.tag'
                     )}
-                </Text>
-              </View>
-              <View style={styles.clanCreatedAtView}>
-                <Text style={styles.headerText}>Clan created:</Text>
-                <Text style={styles.headerText}>
-                  {createdAtObject.clan_date.getDate() +
-                    '.' +
-                    (createdAtObject.clan_date.getMonth() + 1) +
-                    '.' +
-                    createdAtObject.clan_date.getFullYear() +
-                    '.'}
-                </Text>
+                    {']'}
+                  </Text>
+                  <Text style={styles.clanNameText}>
+                    {Object.byString(
+                      personalClanDataObject,
+                      'data.' + personalDataIds.clan_id_str + '.name'
+                    )}
+                  </Text>
+                  <Text style={styles.clanMembersCountText}>
+                    {'Members ' +
+                      Object.byString(
+                        personalClanDataObject,
+                        'data.' + personalDataIds.clan_id_str + '.members_count'
+                      )}
+                  </Text>
+                </View>
+                <View style={styles.clanCreatedAtView}>
+                  <Text style={styles.headerText}>Clan created:</Text>
+                  <Text style={styles.headerText}>
+                    {createdAtObject.clan_date.getDate() +
+                      '.' +
+                      (createdAtObject.clan_date.getMonth() + 1) +
+                      '.' +
+                      createdAtObject.clan_date.getFullYear() +
+                      '.'}
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
+          ) : (
+            <View style={{ marginTop: 10 }}></View>
+          )}
 
           <View style={styles.privateDataPaper}>
             <View style={styles.privateDataView}>
