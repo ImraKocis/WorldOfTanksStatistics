@@ -4,7 +4,6 @@ import PersonalDataScreenPlayer from '../personal_data_screen/PersonalDataScreen
 import PlayersSearch from '../players_search/PlayersSearch';
 
 const Stack = createNativeStackNavigator();
-
 const SearchNavigator = () => {
   return (
     <Stack.Navigator>

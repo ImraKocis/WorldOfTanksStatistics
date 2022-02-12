@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StatusBar } from 'react-native';
-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useForceUpdate from '../komponente/forceUpdate';
 import numbro from 'numbro';
 import { personalDataStyle } from './personalDataStyle';
+
 const styles = personalDataStyle;
 const requestOptions = {
   method: 'GET',

@@ -4,7 +4,6 @@ import PlayersList from '../personal_data_screen/PlayersList';
 import PersonalDataScreenPlayer from '../personal_data_screen/PersonalDataScreenPlayer';
 
 const Stack = createNativeStackNavigator();
-
 const PersonalPlayerDataNavigator = ({ loginDataObject }) => {
   return (
     <Stack.Navigator>

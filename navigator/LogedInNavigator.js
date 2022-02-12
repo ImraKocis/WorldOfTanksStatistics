@@ -9,6 +9,7 @@ import SearchNavigator from './SearchNavigator';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
 const ScreenTabNavigator = ({ loginDataObject, handleSignOutButton }) => {
   return (
     <Tab.Navigator

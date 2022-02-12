@@ -4,7 +4,6 @@ import {
   View,
   TouchableOpacity,
   FlatList,
-  StatusBar,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React, { useState, useEffect, useCallback } from 'react';

@@ -6,8 +6,10 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MainScreen from '../main_screen/main_screen';
 import SearchNavigator from './SearchNavigator';
 import LoginView from '../login/login';
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
 const ScreenTabNavigator = (props) => {
   return (
     <Tab.Navigator

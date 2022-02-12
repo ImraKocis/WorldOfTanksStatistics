@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import reactNativeClearAppCache from 'react-native-clear-app-cache';
+import { StyleSheet, StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SignOutNvigator from './navigator/SignOutNvigator';
 import LogedInNavigator from './navigator/LogedInNavigator';
@@ -27,8 +26,6 @@ export default function App() {
     )
       .then(setLoginDataObject(null))
       .then(setIsLogedIn(false));
-
-    reactNativeClearAppCache.clearAppCache();
   };
   useEffect(() => {}, []);
   handleWebViewNavigationStateChange = (newNavState) => {
@@ -60,6 +57,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
+      <StatusBar hidden />
       {!isLogedIn ? (
         <SignOutNvigator
           handleWebViewNavigationStateChange={

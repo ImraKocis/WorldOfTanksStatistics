@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+
 export const personalDataStyle = StyleSheet.create({
   sammaryView: { backgroundColor: '#2d322d', flex: 1 },
   topTextView: { flex: 1, flexDirection: 'row' },

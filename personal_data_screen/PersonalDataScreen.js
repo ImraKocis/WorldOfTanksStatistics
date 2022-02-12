@@ -4,6 +4,7 @@ import { personalDataStyle } from './personalDataStyle';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useForceUpdate from '../komponente/forceUpdate';
 import numbro from 'numbro';
+
 const styles = personalDataStyle;
 const requestOptions = {
   method: 'GET',

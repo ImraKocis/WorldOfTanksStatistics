@@ -3,6 +3,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import PersonalAchievements from '../personal_data_screen/PersonalAchievements';
 import PersonalDataScreen from '../personal_data_screen/PersonalDataScreen';
 const Tab = createMaterialTopTabNavigator();
+
 const PersonalDataTopTabNavigator = ({ loginDataObject }) => {
   return (
     <Tab.Navigator

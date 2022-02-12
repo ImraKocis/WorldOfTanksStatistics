@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Button } from 'react-native';
 import PersonalDataTopTabNavigator from '../navigator/PersonalDataTopTabNavigator';
 import { personalDataStyle } from './personalDataStyle';
+
 const styles = personalDataStyle;
 
 const LogedInScreen = ({ loginDataObject, handleSignOutButton }) => {

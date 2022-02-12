@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   },
   loadingText: { color: 'black' },
   itemCard: {
-    maxWidth: Dimensions.get('window').width / 3 - 10, // Width / 3 - (marginLeft and marginRight for the components)
+    maxWidth: Dimensions.get('window').width / 3 - 10,
     elevation: 5,
     marginTop: 5,
     marginLeft: 10,
